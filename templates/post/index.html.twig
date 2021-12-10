@@ -1,20 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello PostController!
+{% block title %}WF Camp !
 {% endblock %}
 
 {% block body %}
 	<h1>Liste des posts</h1>
 	{% for post in posts %}
-		<div class="border border-danger my-2 flex">
-			<h3>{{ post.content }}</h3>
-			<p>
-				<small>
-					créeée le
-					{{ post.createdAt | date('d/m/Y à H:i:s') }}
-				</small>
-			</p>
-			<a class="btn btn-secondary rounded" href={{ path('app_post_details',{'id':post.id} ) }}>Details</a>
+		<div class="card border-secondary my-3">
+			<div class="card-header">
+				@Username
+			</div>
+			<div class="card-body">
+				<p class="card-text">
+					{{ post.content }}</p>
+
+			</div>
+			<div class="card-footer text-muted ">
+				<a href="#" class="btn btn-light">
+					<i class="far fa-heart"></i>
+				</a>
+				<a href={{ path('app_post_details',{'id': post.id} ) }} class="btn btn-primary">
+					<i class="far fa-comments"></i>
+				</a>
+				<form method="post" action={{ path('app_post_delete', {'id' : post.id} ) }} class="btn btn-danger">
+					<input type="hidden" name="_token" value={{ csrf_token('delete' ~ post.id) }}>
+					<button type="submit">
+						<i class="far fa-trash-alt"></i>
+					</button>
+				</form>
+
+				<span>
+					{{ post.createdAt | date('d/m/Y') }}</span>
+			</div>
 		</div>
 	{% endfor %}
 {% endblock %}
