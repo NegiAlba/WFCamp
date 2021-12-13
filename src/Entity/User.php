@@ -70,11 +70,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $likes;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Vehicle::class, mappedBy="owner")
+     */
+    private $vehicles;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->likes = new ArrayCollection();
+        $this->vehicles = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -283,6 +289,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->likes->removeElement($like)) {
             $like->removeLike($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Vehicle[]
+     */
+    public function getVehicles(): Collection
+    {
+        return $this->vehicles;
+    }
+
+    public function addVehicle(Vehicle $vehicle): self
+    {
+        if (!$this->vehicles->contains($vehicle)) {
+            $this->vehicles[] = $vehicle;
+            $vehicle->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVehicle(Vehicle $vehicle): self
+    {
+        if ($this->vehicles->removeElement($vehicle)) {
+            // set the owning side to null (unless already changed)
+            if ($vehicle->getOwner() === $this) {
+                $vehicle->setOwner(null);
+            }
         }
 
         return $this;
