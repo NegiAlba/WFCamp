@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User index
+{% endblock %}
+
+{% block body %}
+	<h1>User Infos</h1>
+
+	<p>{{ user.email }}</p>
+	<p>{{ user.roles ? user.roles|json_encode : '' }}</p>
+	<p>{{ user.password }}</p>
+	<p>{{ user.username }}</p>
+	<p>{{ user.birthdate ? user.birthdate|date('Y-m-d') : '' }}</p>
+	<p>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '' }}</p>
+	<div>
+		<a href="{{ path('user_show', {'id': user.id}) }}">show</a>
+		<a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
+	</div>
+{% endblock %}

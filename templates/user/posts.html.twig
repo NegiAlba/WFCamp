@@ -1,14 +1,9 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}WF Camp !
-{% endblock %}
-
-{% block body %}
-	{% for post in posts %}
+{% extends 'user/_profile.html.twig' %}
+{% block content %}
+	{% for post in user.posts %}
 		<div class="card border-secondary my-3 text-black">
 			<div class="card-header">
-				<a href={{ path('app_user_profile', {'id':post.user.id} )}} class="text-decoration-none cursor-pointer">@{{post.user.username}}</a>
-
+				@{{post.user.username}}
 			</div>
 			<div class="card-body">
 				<p class="card-text">

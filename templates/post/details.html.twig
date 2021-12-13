@@ -6,16 +6,17 @@
 {% block body %}
 	{# Post Section #}
 	{% block post %}
-		<div class="card border-secondary my-3">
+		<div class="card border-secondary my-3 text-black">
 			<div class="card-header">
-				@{{post.user.username}}
+				<a href={{ path('app_user_profile', {'id':post.user.id} )}} class="text-decoration-none">@{{post.user.username}}</a>
+
 			</div>
 			<div class="card-body">
 				<p class="card-text">
 					{{ post.content }}</p>
 
 			</div>
-			<div class="card-footer text-muted ">
+			<div class="card-footer text-muted">
 				<a href={{ path('app_post_like', {'id': post.id} )}} class="btn btn-light">
 					{% if app.user in post.likes %}
 						<i class="fas fa-heart" style="color:red;"></i>
@@ -30,7 +31,7 @@
 						</a>
 						<form method="post" action={{ path('app_post_delete', {'id' : post.id} ) }} class="btn btn-danger">
 							<input type="hidden" name="_token" value={{ csrf_token('delete' ~ post.id) }}>
-							<button type="submit">
+							<button type="submit" style="border:none;background-color:transparent;color:white;">
 								<i class="far fa-trash-alt"></i>
 							</button>
 						</form>
@@ -42,9 +43,9 @@
 		</div>
 	{% endblock %}
 	{% block comments %}
-		<div class="card border-success my-3">
+		<div class="card border-success my-3  text-black">
 			{% if app.user %}
-				<div class="card border-secondary m-3 p-3 text-center col-4">
+				<div class="card border-secondary m-3 p-3 text-center col-4 text-muted">
 					{{ form_start(form) }}
 					{{ form_widget(form.content) }}
 					<button type="submit" class="btn btn-secondary">
@@ -61,7 +62,7 @@
 				</div>
 			{% endif %}
 			{% if comments is empty %}
-				<div class="card border-warning m-3 p-3 text-center">
+				<div class="card border-warning m-3 p-3 text-center text-muted">
 					<img src="https://www.vhv.rs/dpng/d/553-5530609_vector-camping-camping-free-vectors-download-camping-icon.png" alt="empty camp" class="img-thumbnail rounded mx-auto d-block" style="height:200px;width:200px;">
 					<div class="card-text">
 						<p>No comments yet, be the first to comment !</p>
@@ -71,7 +72,8 @@
 				{% for comment in comments %}
 					<div class="card border-warning m-3 p-3">
 						<div class="card-header">
-							@{{comment.user.username}}
+							<a href={{ path('app_user_profile', {'id':comment.user.id} )}} class="text-decoration-none">@{{comment.user.username}}</a>
+
 							-
 							{{ comment.createdAt | date('d/m/Y') }}
 						</div>
