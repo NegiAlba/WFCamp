@@ -11,7 +11,7 @@ Mettre en place un système d'authentification des utilisateurs via une interfac
     - Réagir aux posts des autres utilisateurs (via un système de commentaires).
     - Créer un panel administrateur.
     - Ces posts pourront inclure des fichiers média (jpg,png,gif).
-    - Les utilisateurs pourront "liker" les posts des utilisateurs. (Ainsi que les leurs, à priori on va l'activer automatiquement).
+    - Les utilisateurs pourront "liker" les posts des utilisateurs. (Ainsi que les leurs, à priori on va l'activer automatiquement).git 
     - Système de tags (?)
     - Créer des liens avec des utilisateurs (?)
     - Créer un système plus fluide grâce à l'AJAX (???)

@@ -18,7 +18,9 @@ class PostController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(PostRepository $postRepo): Response
     {
-        $arrayPosts = $postRepo->findAll();
+        //? Je passe d'un ordre ordonné par id, à un ordre antéchronologique en classant par date.
+        // $arrayPosts = $postRepo->findAll();
+        $arrayPosts = $postRepo->findBy([], ['createdAt' => 'DESC']);
 
         // dd($arrayPosts);
 
@@ -28,9 +30,9 @@ class PostController extends AbstractController
     #[Route('/post/{id<\d+>}', name: 'app_post_details', methods : ['GET'])]
     public function details(Post $post): Response
     {
-        dd($post);
+        $comments = $post->getComments();
 
-        return $this->render('post/index.html.twig', []);
+        return $this->render('post/details.html.twig', ['post' => $post, 'comments' => $comments]);
     }
 
     #[Route('/post/create', name: 'app_post_create')]
