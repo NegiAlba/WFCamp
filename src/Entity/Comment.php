@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Comment
 {
@@ -33,6 +34,11 @@ class Comment
      * @ORM\JoinColumn(nullable=false)
      */
     private $post;
+
+    /**
+     * @ORM\Column(type="datetime_immutable")
+     */
+    private $createdAt;
 
     public function getId(): ?int
     {
@@ -73,5 +79,25 @@ class Comment
         $this->post = $post;
 
         return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function defaultCreatedAt()
+    {
+        $this->createdAt = new \DateTimeImmutable();
     }
 }

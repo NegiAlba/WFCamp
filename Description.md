@@ -9,9 +9,10 @@ Mettre en place un système d'authentification des utilisateurs via une interfac
     - Poster des billets/posts de 400 caractères maximum.
     - Affichage dans une liste antéchronologique pour les posts.
     - Réagir aux posts des autres utilisateurs (via un système de commentaires).
+    - Les utilisateurs pourront "liker" les posts des utilisateurs. (Ainsi que les leurs, à priori on va l'activer automatiquement).
     - Créer un panel administrateur.
     - Ces posts pourront inclure des fichiers média (jpg,png,gif).
-    - Les utilisateurs pourront "liker" les posts des utilisateurs. (Ainsi que les leurs, à priori on va l'activer automatiquement).git 
+    - Ajouter des dates relatives (a year ago, 5 mins ago, just now)
     - Système de tags (?)
     - Créer des liens avec des utilisateurs (?)
     - Créer un système plus fluide grâce à l'AJAX (???)

@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Post;
+use App\Form\CommentType;
 use App\Form\PostType;
 use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,12 +29,26 @@ class PostController extends AbstractController
         return $this->render('post/index.html.twig', ['posts' => $arrayPosts]);
     }
 
-    #[Route('/post/{id<\d+>}', name: 'app_post_details', methods : ['GET'])]
-    public function details(Post $post): Response
+    #[Route('/post/{id<\d+>}', name: 'app_post_details', methods : ['GET|POST'])]
+    public function details(Post $post, Request $request, EntityManagerInterface $em, Security $security): Response
     {
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $security->getUser();
+            $comment->setUser($user);
+            //? Les deux méthodes sont équivalentes setPost ou addComment
+            // $comment->setPost($post);
+            $post->addComment($comment);
+            $em->persist($comment);
+            $em->flush();
+        }
+
+        $likes = $post->getLikes();
         $comments = $post->getComments();
 
-        return $this->render('post/details.html.twig', ['post' => $post, 'comments' => $comments]);
+        return $this->renderForm('post/details.html.twig', ['post' => $post, 'comments' => $comments, 'form' => $form, 'likes' => $likes]);
     }
 
     #[Route('/post/create', name: 'app_post_create')]
@@ -77,7 +93,7 @@ class PostController extends AbstractController
         return $this->redirectToRoute('app_home');
     }
 
-    #[Route('/post/{id<\d+>}', name: 'app_post_delete', methods : ['POST'])]
+    #[Route('/post/delete/{id<\d+>}', name: 'app_post_delete', methods : ['POST'])]
     #[IsGranted('ROLE_USER', message: 'You need to be logged-in to access this resource')]
     public function delete(Request $request, Post $post, EntityManagerInterface $em, Security $security): Response
     {
@@ -94,5 +110,25 @@ class PostController extends AbstractController
         }
 
         return $this->redirectToRoute('app_home');
+    }
+
+    #[Route('/like/{id}', name: 'app_post_like')]
+    #[IsGranted('ROLE_USER', message: 'You need to be logged-in to access this resource')]
+    public function like(Post $post, Security $security, EntityManagerInterface $em): Response
+    {
+        $user = $security->getUser();
+        //? Si mon user a déja liké le post, alors il fait parti de l'array qui contient les post.
+        if ($post->getLikes()->contains($user)) {
+            //? Il faut l'en enlever
+            $post->removeLike($user);
+            $em->flush();
+
+            return $this->redirectToRoute('app_post_details', ['id' => $post->getId()]);
+        }
+        //? Sinon il faut le rajouter
+        $post->addLike($user);
+        $em->flush();
+
+        return $this->redirectToRoute('app_post_details', ['id' => $post->getId()]);
     }
 }

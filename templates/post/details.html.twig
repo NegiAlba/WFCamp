@@ -16,8 +16,12 @@
 
 			</div>
 			<div class="card-footer text-muted ">
-				<a href="#" class="btn btn-light">
-					<i class="far fa-heart"></i>
+				<a href={{ path('app_post_like', {'id': post.id} )}} class="btn btn-light">
+					{% if app.user in post.likes %}
+						<i class="fas fa-heart" style="color:red;"></i>
+					{% else %}
+						<i class="far fa-heart"></i>
+					{% endif %}
 				</a>
 				{% if app.user %}
 					{% if app.user is same as(post.user) %}
@@ -38,10 +42,16 @@
 		</div>
 	{% endblock %}
 	{% block comments %}
-		<div class="card border-success bg-dark my-3">
+		<div class="card border-success my-3">
 			{% if app.user %}
-				<div class="card" contenteditable="true">
-					FORM ICI
+				<div class="card border-secondary m-3 p-3 text-center col-4">
+					{{ form_start(form) }}
+					{{ form_widget(form.content) }}
+					<button type="submit" class="btn btn-secondary">
+						Comment
+						<i class="far fa-comment-dots"></i>
+					</button>
+					{{ form_end(form) }}
 				</div>
 			{% else %}
 				<div class="card mt-3 p-3" contenteditable="true">
@@ -61,34 +71,17 @@
 				{% for comment in comments %}
 					<div class="card border-warning m-3 p-3">
 						<div class="card-header">
-							@{{post.user.username}}
+							@{{comment.user.username}}
+							-
+							{{ comment.createdAt | date('d/m/Y') }}
 						</div>
 						<div class="card-body">
 							<p class="card-text">
-								{{ post.content }}</p>
-
-						</div>
-						<div class="card-footer text-muted ">
-							{% if app.user %}
-								{% if app.user is same as(post.user) %}
-									<a href={{ path('app_post_edit',{'id': post.id} ) }} class="btn btn-warning">
-										<i class="fas fa-wrench"></i>
-									</a>
-									<form method="post" action={{ path('app_post_delete', {'id' : post.id} ) }} class="btn btn-danger">
-										<input type="hidden" name="_token" value={{ csrf_token('delete' ~ post.id) }}>
-										<button type="submit">
-											<i class="far fa-trash-alt"></i>
-										</button>
-									</form>
-								{% endif %}
-							{% endif %}
-							<span>
-								{{ post.createdAt | date('d/m/Y') }}</span>
+								{{ comment.content }}</p>
 						</div>
 					</div>
 				{% endfor %}
 			{% endif %}
 		</div>
-
 	{% endblock %}
 {% endblock %}
