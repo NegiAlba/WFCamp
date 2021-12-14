@@ -5,15 +5,18 @@
 
 {% block body %}
 	{% for post in posts %}
-		<div class="card border-secondary my-3 glass-post">
+		<div class="card border-secondary my-3 glass-post text-black">
 			<div class="card-header">
 				<a href={{ path('app_user_profile', {'id':post.user.id} )}} class="text-decoration-none">@{{post.user.username}}</a>
 
 			</div>
+			{% if post.mediaName is empty %}
+				{% else %}
+					<img class="card-img-top img-fluid" src={{ vich_uploader_asset(post) }} alt={{ post.mediaName }}/>
+			{% endif %}
 			<div class="card-body">
 				<p class="card-text">
 					{{ post.content }}</p>
-
 			</div>
 			<div class="card-footer text-muted ">
 				<a href={{ path('app_post_likehome', {'id': post.id} )}} class="btn btn-light">
