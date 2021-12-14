@@ -13,4 +13,4 @@ Ensuite, il suffira de démarrer votre serveur symfony avec
 ```symfony server:start```
 ```yarn encore dev-server```
 
-** Attention : Un serveur SQL est nécessaire, et une stack \*AMP est supposée dans ce projet, par conséquent modifiez les variables d'environnement en conséquence **
+**Attention : Un serveur SQL est nécessaire, et une stack \*AMP est supposée dans ce projet, par conséquent modifiez les variables d'environnement en conséquence**
