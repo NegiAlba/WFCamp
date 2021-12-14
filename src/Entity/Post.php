@@ -3,14 +3,18 @@
 namespace App\Entity;
 
 use App\Repository\PostRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
  * @ORM\HasLifecycleCallbacks()
+ * @Vich\Uploadable
  */
 class Post
 {
@@ -58,6 +62,22 @@ class Post
      */
     private $likes;
 
+    /**
+     * NOTE: This is not a mapped field of entity metadata, just a simple property.
+     *
+     * @Vich\UploadableField(mapping="post_media", fileNameProperty="mediaName")
+     *
+     * @var File|null
+     */
+    private $mediaFile;
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @var string|null
+     */
+    private $mediaName;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -81,24 +101,24 @@ class Post
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function setCreatedAt(DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
+    public function setUpdatedAt(DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
@@ -186,5 +206,43 @@ class Post
         $this->likes->removeElement($like);
 
         return $this;
+    }
+
+    /**
+     * Get the value of mediaName.
+     */
+    public function getMediaName(): ?string
+    {
+        return $this->mediaName;
+    }
+
+    /**
+     * Set the value of mediaName.
+     */
+    public function setMediaName(?string $mediaName): self
+    {
+        $this->mediaName = $mediaName;
+
+        return $this;
+    }
+
+    /**
+     * Get nOTE: This is not a mapped field of entity metadata, just a simple property.
+     */
+    public function getMediaFile(): ?File
+    {
+        return $this->mediaFile;
+    }
+
+    /**
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
+     */
+    public function setMediaFile(?File $mediaFile = null): void
+    {
+        $this->mediaFile = $mediaFile;
+
+        if (null !== $mediaFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
     }
 }
