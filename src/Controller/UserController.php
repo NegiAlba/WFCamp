@@ -47,8 +47,9 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+            $user->setMediaFile(null);
 
-            return $this->redirectToRoute('user_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_user_profile', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('user/edit.html.twig', [
@@ -65,6 +66,6 @@ class UserController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('user_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
     }
 }

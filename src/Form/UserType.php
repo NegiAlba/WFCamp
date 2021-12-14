@@ -9,12 +9,19 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('mediaFile', VichFileType::class, [
+                'required' => false,
+                'allow_delete' => true,
+                'delete_label' => 'Remove Profile Picture',
+                'asset_helper' => true,
+            ])
             ->add('email')
             ->add('username', TextType::class, [
             ])
