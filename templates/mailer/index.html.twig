@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formulaire de contact - WFCamp
+{% endblock %}
+
+{% block body %}
+	<h1>Contacter l'administrateur</h1>
+
+	<div>
+		{{ form_start(form) }}
+		{{ form_row(form, {'attr': {'class': 'border-4'}}) }}
+		<button class="btn btn-secondary" type="submit">{{ action }}</button>
+		{{ form_end(form) }}
+	</div>
+
+{% endblock %}
